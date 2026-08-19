@@ -1,0 +1,61 @@
+# render.yaml — Render.com Blueprint
+# Deploys both the backend API and the frontend static site automatically.
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+
+  # ── Backend: Express API ────────────────────────────────────────────────────
+  - type: web
+    name: ai-careerforge-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DB_PATH
+        value: data/careerforge.db
+      - key: UPLOAD_DIR
+        value: uploads
+      - key: MAX_FILE_SIZE_MB
+        value: 5
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      # These MUST be set in the Render dashboard (never hardcode secrets here):
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: WATSONX_API_KEY
+        sync: false
+      - key: WATSONX_PROJECT_ID
+        sync: false
+      - key: WATSONX_URL
+        sync: false
+    disk:
+      name: careerforge-data
+      mountPath: /opt/render/project/src/server
+      sizeGB: 1
+
+  # ── Frontend: React Static Site ─────────────────────────────────────────────
+  - type: web
+    name: ai-careerforge
+    runtime: static
+    region: oregon
+    plan: free
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      # Send all routes to index.html so React Router works
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -1,0 +1,32 @@
+﻿# ── Dependencies ──────────────────────────────────────────────────────────────
+node_modules/
+
+# ── Environment secrets ───────────────────────────────────────────────────────
+.env
+# Keep .env.example committed — it documents required variables without secrets
+
+# ── Vite / React build output ─────────────────────────────────────────────────
+dist/
+build/
+
+# ── Database files (local SQLite — never commit user data) ────────────────────
+*.db
+*.db-shm
+*.db-wal
+
+# ── Uploaded resume files (user data — never commit) ─────────────────────────
+server/uploads/*.pdf
+server/uploads/*.PDF
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ── OS files ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Editor ────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
